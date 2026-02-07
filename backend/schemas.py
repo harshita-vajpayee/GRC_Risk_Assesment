@@ -13,3 +13,5 @@ class RiskResponse(RiskCreate):
 
     class Config:
         orm_mode = True
+
+
