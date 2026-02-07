@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 function RiskForm({ onSubmit }) {
   const [asset, setAsset] = useState("");
@@ -6,12 +6,35 @@ function RiskForm({ onSubmit }) {
   const [likelihood, setLikelihood] = useState(3);
   const [impact, setImpact] = useState(3);
 
-  const score = likelihood * impact;
+  const [preview, setPreview] = useState({
+    score: null,
+    level: null,
+  });
 
-  const level =
-    score <= 5 ? "Low" :
-    score <= 12 ? "Medium" :
-    score <= 18 ? "High" : "Critical";
+  // 🔹 Live API preview
+  useEffect(() => {
+    const fetchPreview = async () => {
+      try {
+        const res = await fetch("http://127.0.0.1:8000/preview-risk", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            likelihood,
+            impact,
+          }),
+        });
+
+        const data = await res.json();
+        setPreview(data);
+      } catch (err) {
+        console.error("Preview error", err);
+      }
+    };
+
+    fetchPreview();
+  }, [likelihood, impact]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -74,9 +97,12 @@ function RiskForm({ onSubmit }) {
             />
           </div>
 
-          <div className="alert alert-info">
-            Preview → <strong>Score:</strong> {score} | <strong>Level:</strong> {level}
-          </div>
+          {preview.score !== null && (
+            <div className="alert alert-info">
+              Preview → <strong>Score:</strong> {preview.score} |{" "}
+              <strong>Level:</strong> {preview.level}
+            </div>
+          )}
 
           <button className="btn btn-primary w-100">
             Submit Risk

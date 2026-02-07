@@ -1,6 +1,7 @@
 from fastapi import FastAPI, HTTPException, Depends
 from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy.orm import Session
+from pydantic import BaseModel
 
 from database import SessionLocal, engine
 from models import Base, Risk
@@ -37,6 +38,21 @@ def calculate_level(score: int) -> str:
         return "High"
     else:
         return "Critical"
+
+
+class RiskPreview(BaseModel):
+    likelihood: int
+    impact: int
+
+@app.post("/preview-risk")
+def preview_risk(data: RiskPreview):
+    score = data.likelihood * data.impact
+    level = calculate_level(score)
+    return {
+        "score": score,
+        "level": level
+    }
+
 
 # POST: assess risk
 @app.post("/assess-risk", response_model=RiskResponse)
