@@ -10,7 +10,9 @@ function RiskForm({ onSubmit }) {
     score: null,
     level: null,
   });
-
+  useEffect(() => {
+  console.log("API URL:", process.env.REACT_APP_API_URL);
+}, []);
   // Live API preview
   useEffect(() => {
     const fetchPreview = async () => {
