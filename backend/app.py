@@ -62,7 +62,6 @@ def get_risks(db: Session = Depends(get_db)):
 @app.post("/assess-risk", response_model=RiskResponse)
 def assess_risk(risk: RiskCreate, db: Session = Depends(get_db)):
 
-    # 🔴 ADD THIS BLOCK HERE
     if not (1 <= risk.likelihood <= 5 and 1 <= risk.impact <= 5):
         raise HTTPException(
             status_code=400,
