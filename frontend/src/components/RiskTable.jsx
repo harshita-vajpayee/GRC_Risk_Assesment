@@ -8,10 +8,28 @@ function mitigationHint(level) {
   }
 }
 
-function RiskTable({ risks, filter, onFilterChange, loading }) {
+function RiskTable({
+  risks = [],
+  loading,
+  filter,
+  heatFilter,
+  onFilterChange
+}) {
+  // ✅ SAFE filtering
+  let visibleRisks = Array.isArray(risks) ? risks : [];
+
+  if (heatFilter) {
+    visibleRisks = visibleRisks.filter(
+      r =>
+        r.likelihood === heatFilter.likelihood &&
+        r.impact === heatFilter.impact
+    );
+  }
+
   return (
-    <div className="card shadow-sm mt-4">
+    <div className="card shadow-sm">
       <div className="card-body">
+
         <div className="d-flex justify-content-between mb-3">
           <h5>Risk Register</h5>
 
@@ -30,8 +48,8 @@ function RiskTable({ risks, filter, onFilterChange, loading }) {
 
         {loading ? (
           <p>Loading risks…</p>
-        ) : risks.length === 0 ? (
-          <p>No risks yet</p>
+        ) : visibleRisks.length === 0 ? (
+          <p>No risks found</p>
         ) : (
           <div className="table-responsive">
             <table className="table table-bordered table-sm">
@@ -48,7 +66,7 @@ function RiskTable({ risks, filter, onFilterChange, loading }) {
                 </tr>
               </thead>
               <tbody>
-                {risks.map(r => (
+                {visibleRisks.map(r => (
                   <tr key={r.id}>
                     <td>{r.id}</td>
                     <td>{r.asset}</td>

@@ -2,6 +2,7 @@ import Navbar from "./components/Navbar";
 import Dashboard from "./pages/Dashboard";
 import Risks from "./pages/Risks";
 import HeatMap from "./pages/HeatMap";
+import Stats from "./pages/Stats";
 import { Routes, Route } from "react-router-dom";
 
 function App() {
@@ -12,6 +13,7 @@ function App() {
       <Routes>
         <Route path="/" element={<Dashboard />} />
         <Route path="/risks" element={<Risks />} />
+        <Route path="/stats" element={<Stats />} />
         <Route path="/heatmap" element={<HeatMap />} />
       </Routes>
     </>

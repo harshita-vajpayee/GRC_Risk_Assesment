@@ -10,6 +10,12 @@ function Navbar() {
           Dashboard
         </Link>
 
+        <li className="btn btn-outline-light btn-sm me-2" to="/stats">
+          <Link className="nav-link" to="/stats">
+            Stats
+          </Link>
+        </li>
+
         <Link className="btn btn-outline-light btn-sm me-2" to="/risks">
           Risks
         </Link>

@@ -28,7 +28,7 @@ def get_db():
     finally:
         db.close()
 
-# Risk level logic (NIST-style)
+# Risk level logic 
 def calculate_level(score: int) -> str:
     if score <= 5:
         return "Low"
@@ -53,10 +53,22 @@ def preview_risk(data: RiskPreview):
         "level": level
     }
 
+@app.get("/risks", response_model=list[RiskResponse])
+def get_risks(db: Session = Depends(get_db)):
+    return db.query(Risk).all()
+
 
 # POST: assess risk
 @app.post("/assess-risk", response_model=RiskResponse)
 def assess_risk(risk: RiskCreate, db: Session = Depends(get_db)):
+
+    # 🔴 ADD THIS BLOCK HERE
+    if not (1 <= risk.likelihood <= 5 and 1 <= risk.impact <= 5):
+        raise HTTPException(
+            status_code=400,
+            detail="Invalid range: Likelihood and Impact must be 1–5."
+        )
+
     score = risk.likelihood * risk.impact
     level = calculate_level(score)
 
@@ -73,11 +85,3 @@ def assess_risk(risk: RiskCreate, db: Session = Depends(get_db)):
     db.commit()
     db.refresh(new_risk)
     return new_risk
-
-# GET: fetch risks
-@app.get("/risks", response_model=list[RiskResponse])
-def get_risks(level: str | None = None, db: Session = Depends(get_db)):
-    query = db.query(Risk)
-    if level:
-        query = query.filter(Risk.level == level)
-    return query.all()

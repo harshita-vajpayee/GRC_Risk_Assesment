@@ -11,7 +11,7 @@ function RiskForm({ onSubmit }) {
     level: null,
   });
 
-  // 🔹 Live API preview
+  // Live API preview
   useEffect(() => {
     const fetchPreview = async () => {
       try {

@@ -15,8 +15,18 @@ export async function assessRisk(riskData) {
 }
 
 export async function getRisks() {
-  const response = await fetch(`${API_BASE_URL}/risks`);
-  return response.json();
+  try {
+    const response = await fetch(`${API_BASE_URL}/risks`);
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
+    return await response.json();
+  } catch (error) {
+    console.error("Error fetching risks:", error);
+    return [];
+  }
 }
 
 export async function exportRisksCSV() {
