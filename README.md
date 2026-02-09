@@ -148,6 +148,9 @@ GET /api/risks/stats
 ## Testing
 Testing has been done by putting 5-7 dummy entries.
 
+## Assumptions 
+Assumed no authentication and authorization is required for simplicity.
+
 ## Challenges Faced
 
  - Handled async API calls with useEffect while keeping consistent state for risk list and filtered data.
