@@ -30,7 +30,7 @@ export async function getRisks() {
 }
 
 export async function exportRisksCSV() {
-  const res = await fetch("http://127.0.0.1:8000/risks");
+  const res = await fetch(`${API_BASE_URL}/risks`);
   const data = await res.json();
 
   const headers = ["Asset", "Threat", "Score", "Level"];

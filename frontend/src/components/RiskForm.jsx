@@ -1,3 +1,4 @@
+import { API_BASE_URL } from "../config";
 import { useEffect, useState } from "react";
 
 function RiskForm({ onSubmit }) {
@@ -17,7 +18,7 @@ function RiskForm({ onSubmit }) {
   useEffect(() => {
     const fetchPreview = async () => {
       try {
-        const res = await fetch("http://127.0.0.1:8000/preview-risk", {
+        const res = await fetch(`${API_BASE_URL}/preview-risk`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
